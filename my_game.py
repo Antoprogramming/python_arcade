@@ -19,6 +19,7 @@ SCREEN_HEIGHT = 1080
 # Variables controlling the player
 PLAYER_LIVES = 3
 PLAYER_SPEED_X = 5
+PLAYER_SPEED_Y = 5
 PLAYER_START_X = SCREEN_WIDTH / 2
 PLAYER_START_Y = 100
 PLAYER_SHOT_SPEED = 13
@@ -52,7 +53,7 @@ class Player(arcade.Sprite):
 
         # Update center_x
         self.center_x += self.change_x
-
+        self.center_y += self.change_y
         # Don't let the player move off screen
         if self.left < 0:
             self.left = 0
@@ -191,12 +192,16 @@ class MyGame(arcade.Window):
 
         # Calculate player speed based on the keys pressed
         self.player_sprite.change_x = 0
-
+        self.player_sprite.change_y = 0
         # Move player with keyboard
         if self.left_pressed and not self.right_pressed:
             self.player_sprite.change_x = -PLAYER_SPEED_X
         elif self.right_pressed and not self.left_pressed:
             self.player_sprite.change_x = PLAYER_SPEED_X
+        if self.up_pressed and not self.down_pressed:
+            self.player_sprite.change_y = PLAYER_SPEED_Y
+        elif self.down_pressed and not self.up_pressed:
+            self.player_sprite.change_y = -PLAYER_SPEED_Y
 
         # Move player with joystick if present
         if self.joystick:
@@ -214,14 +219,15 @@ class MyGame(arcade.Window):
         """
 
         # Track state of arrow keys
-        if key == arcade.key.UP:
+        if key == arcade.key.W:
             self.up_pressed = True
-        elif key == arcade.key.DOWN:
+        elif key == arcade.key.S:
             self.down_pressed = True
-        elif key == arcade.key.LEFT:
+        elif key == arcade.key.A:
             self.left_pressed = True
-        elif key == arcade.key.RIGHT:
+        elif key == arcade.key.D:
             self.right_pressed = True
+
 
         if key == FIRE_KEY:
             new_shot = PlayerShot(
@@ -236,19 +242,20 @@ class MyGame(arcade.Window):
         Called whenever a key is released.
         """
 
-        if key == arcade.key.UP:
+        if key == arcade.key.W:
             self.up_pressed = False
-        elif key == arcade.key.DOWN:
+        elif key == arcade.key.S:
             self.down_pressed = False
-        elif key == arcade.key.LEFT:
+        elif key == arcade.key.A:
             self.left_pressed = False
-        elif key == arcade.key.RIGHT:
+        elif key == arcade.key.D:
             self.right_pressed = False
+
 
     def on_joybutton_press(self, joystick, button_no):
         print("Button pressed:", button_no)
         # Press the fire key
-        self.on_key_press(FIRE_KEY, [])
+        self.on_key_press(FIRE_KEY)
 
     def on_joybutton_release(self, joystick, button_no):
         print("Button released:", button_no)

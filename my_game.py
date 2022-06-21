@@ -21,7 +21,7 @@ PLAYER_LIVES = 3
 PLAYER_SPEED_X = 5
 PLAYER_SPEED_Y = 5
 PLAYER_START_X = SCREEN_WIDTH / 2
-PLAYER_START_Y = 100
+PLAYER_START_Y = 150
 PLAYER_SHOT_SPEED = 13
 
 FIRE_KEY = arcade.key.SPACE
@@ -59,6 +59,10 @@ class Player(arcade.Sprite):
             self.left = 0
         elif self.right > SCREEN_WIDTH - 1:
             self.right = SCREEN_WIDTH - 1
+        if self.bottom < 0:
+            self.bottom = 0
+        elif self.top > SCREEN_HEIGHT - 1:
+            self.top = SCREEN_HEIGHT - 1
 
 
 class PlayerShot(arcade.Sprite):
